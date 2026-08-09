@@ -131,6 +131,7 @@ import {
   type UserPreferences,
   type OpenTabRecord,
 } from "@/main-axios";
+import { getCachedSSHFolders } from "@/lib/hosts-request-cache";
 import { DonationReminderModal } from "@/user/DonationReminderModal.tsx";
 import { RemoteSyncBanner } from "@/components/RemoteSyncBanner.tsx";
 import { MigrationNoticeDialog } from "@/components/MigrationNoticeDialog.tsx";
@@ -840,7 +841,7 @@ export function AppShell({
     try {
       const [raw, folders] = await Promise.all([
         getSSHHosts(),
-        getSSHFolders().catch(() => []),
+        getCachedSSHFolders(getSSHFolders).catch(() => []),
       ]);
       const converted = raw.map(sshHostToHost);
       setAllHosts(converted);
